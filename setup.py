@@ -109,6 +109,8 @@ setup(
         'csbdeep>=0.6.3',
         'scikit-image',
         'numba',
+        'augmend @ git+ssh://git@github.com/stardist/augmend#egg=augmend',
+        'backbones @ git+ssh://git@github.com/bentaculum/backbones#egg=backbones',
     ],
 
     extras_require={
