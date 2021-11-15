@@ -334,7 +334,7 @@ class StarDist2D(StarDistBase):
             return Model([input_img], [output_prob,output_dist])
 
 
-    def train(self, X, Y, validation_data, classes='auto', augmenter=None, seed=None, epochs=None, steps_per_epoch=None, workers=1):
+    def train(self, X, Y, validation_data, classes='auto', train_augmenter=None, val_augmenter=None, seed=None, epochs=None, steps_per_epoch=None, workers=1):
         """Train the neural network with the given data.
 
         Parameters
@@ -419,12 +419,12 @@ class StarDist2D(StarDistBase):
         n_data_val = len(validation_data[0])
         classes_val = self._parse_classes_arg(validation_data[2], n_data_val) if self._is_multiclass() else None
         n_take = self.config.train_n_val_patches if self.config.train_n_val_patches is not None else n_data_val
-        _data_val = StarDistData2D(validation_data[0],validation_data[1], classes=classes_val, batch_size=n_take, length=1, **data_kwargs)
+        _data_val = StarDistData2D(validation_data[0],validation_data[1], augmenter=val_augmenter, classes=classes_val, batch_size=n_take, length=1, **data_kwargs)
         data_val = _data_val[0]
 
         # expose data generator as member for general diagnostics
         self.data_train = StarDistData2D(X, Y, classes=classes, batch_size=self.config.train_batch_size,
-                                         augmenter=augmenter, length=epochs*steps_per_epoch, **data_kwargs)
+                                         augmenter=train_augmenter, length=epochs*steps_per_epoch, **data_kwargs)
 
         if self.config.train_tensorboard:
             # show dist for three rays
